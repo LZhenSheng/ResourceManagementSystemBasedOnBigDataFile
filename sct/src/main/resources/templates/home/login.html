@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>登录</title>
+    <link href="/fonts/iconfonts/iconfont.css" rel="stylesheet" >
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/animate.min.css" rel="stylesheet">
+    <link href="/css/style.min.css" rel="stylesheet">
+    <link href="/login.css" rel="stylesheet">
+    <link href="/css/login.min.css" rel="stylesheet">
+    <script src="/js/jquery.min.js"></script>
+    <script>
+        if (window.top!==window.self) {
+            window.top.location=window.location
+        };
+    </script>
+
+</head>
+
+<body class="signin">
+<div>
+
+    <div class="myhead">
+        <div class="row">
+            <div class="">
+                <img style="float: left; height: 60px ;margin-top: 10px;margin-left: 55px" src="/img/newlogo.png">
+                <h1 style="float: left; margin-top: 20px;color: rgba(0,0,0,0.74) ;">随存通</h1>
+            </div>
+        </div>
+
+    </div>
+    <div class="mycontainer">
+        <div class="signinpanel">
+            <div class="row">
+                <div style="float: left; width: 300px;">
+                    <form action="/home/loginCheck" id="login" onsubmit="return login()" style="border: none;background: linear-gradient( rgba(255,255,255,1), rgba(255,255,255,0.7))">
+                        <h2 class="no-margins" style="color: rgba(0,0,0,0.68);font-weight: 400">请登录：</h2>
+                        <p class="m-t-md">   </p>
+                        <input name="phone" id="phone" style="border-radius:4px;" type="text" class="form-control uname" placeholder="    手机号码" />
+                        <input name="password" id="password" style="border-radius:4px;" type="password" class="form-control pword m-b" placeholder="    请输入密码" />
+                        <a href="/home/retrivepwd">忘记密码？</a>
+                        <a href="/home/register" style="float: right">注册账号</a>
+                        <button  class="btn btn-success btn-block btn-outline">登 录</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="mytail">
+        <div class="signup-footer">
+            <div class="pull-left" style="color: black;margin-left: 16.66%;">
+                &copy; 2021 All Rights Reserved. Guilin University of Electronic and Technology
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript">
+    function login() {
+        var user = {};
+        var t = $('#login').serializeArray();
+        $.each(t, function () {
+            user[this.name] = this.value;
+        });
+        var json = JSON.stringify(user);
+        console.log(json);
+        $.ajax({
+            url:  "/home/loginCheck",     //请求的地址为、login;
+            method: 'post',
+            data: json,
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data.code);
+                if (data.code === '201') {//用户登录成功
+                    //跳转至不同的视图中
+                    let params = {
+                        "id": user["phone"],
+                        "path": "/user/master/"+user["phone"]
+                    };
+                    console.log(params);
+                    httpPost("/sct/index", params);
+                } else {
+                    layer.msg(data.message, {
+                        time: 2000, //2s后自动关闭
+                    });
+                }
+            },
+            error: function (data) {
+                layer.msg(data.message, {
+                    time: 2000, //2s后自动关闭
+                });
+            }
+        });
+        return false;
+    }
+
+    //发送POST请求跳转到指定页面
+    function httpPost(URL, PARAMS) {
+        var temp = document.createElement("form");
+        temp.action = URL;
+        temp.method = "POST";
+        temp.style.display = "none";
+        for (var x in PARAMS) {
+            var opt = document.createElement("textarea");
+            opt.name = x;
+            opt.value = PARAMS[x];
+            temp.appendChild(opt);
+        }
+        document.body.appendChild(temp);
+        temp.submit();
+        return temp;
+    }
+
+</script>
+
+</html>

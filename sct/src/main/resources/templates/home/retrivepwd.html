@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>表单向导</title>
+    <link href="/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+	<link href="/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+    <link href="/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content ">
+        
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="ibox">
+					<div class="ibox-content" >
+                        <h2>
+                                找回密码
+                            </h2>
+                        <p>
+                            根据引导找回您的密码
+                        </p>
+
+                        <form id="form" class="wizard-big">
+                            <h1>账户和手机号码</h1>
+                            <fieldset>
+                                
+                                <div class="row">
+									<h2 class="col-sm-offset-2">账户信息</h2>
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="form-group">
+                                            <label>用户名 *</label>
+                                            <input id="userName" name="userName" type="text" class="form-control required my-form">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>手机号码 *</label>
+                                            <input id="phone" name="phone" type="text" class="form-control required my-form">
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </fieldset>
+                            <h1>个人信息验证</h1>
+                            <fieldset style="margin-bottom:30px;">
+                                <div class="row">
+                                	<h2 class="col-sm-offset-2">账户信息</h2>
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                       <div class="form-group">
+                                            <label>请选择密保问题</label>
+                                        	<!-- <input id="name" name="name" type="text" class="form-control required my-form"> -->
+                                        	<div class="form-group">
+                                        	    <div class="input-group col-sm-12">
+                                        	        <select data-placeholder="" class="chosen-select my-form" style="padding: 8px; border: 1px solid #ccc;" tabindex="2">
+                                        	        <option value="">选择密保问题</option>
+                                        	        <option value="110000" hassubinfo="true" >您最喜欢的食物是？</option>
+                                        	        <option value="120000" hassubinfo="true" >您的小学班主任的名字是？</option>
+                                        	        <option value="130000" hassubinfo="true" >您的个人计算机型号是？</option>
+                                        	        </select>
+                                        	    </div>
+                                        	</div>
+                                        	
+                                        </div>
+                                        <div class="form-group">
+                                            <label>密保问题答案</label>
+                                            <input id="answer" name="answer" type="text" class="form-control required my-form" placeholder="请输入答案...">
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            
+
+                            <h1>修改密码</h1>
+                            <fieldset>
+								<div class="row">
+									<h2 class="col-sm-offset-2">请重新设置密码</h2>
+								    <div class="col-sm-8 col-sm-offset-2">
+								      <div class="form-group">
+								          <label>密码 *</label>
+								          <input id="password" name="password" type="password" class="form-control required my-form">
+								      </div>
+								      <div class="form-group">
+								          <label>确认密码 *</label>
+								          <input id="confirm" name="confirm" type="password" class="form-control required my-form">
+								      </div>
+								    </div>
+								</div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/content.min.js?v=1.0.0"></script>
+    <script src="/js/plugins/staps/jquery.steps.min.js"></script>
+    <script src="/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="/js/plugins/validate/messages_zh.min.js"></script>
+    <script>
+        $(document).ready(function(){$("#wizard").steps();
+        $("#form").steps({bodyTag:"fieldset",onStepChanging:function(event,currentIndex,newIndex){if(currentIndex>newIndex){return true}if(newIndex===3&&Number($("#age").val())<18){return false}var form=$(this);if(currentIndex<newIndex){$(".body:eq("+newIndex+") label.error",form).remove();$(".body:eq("+newIndex+") .error",form).removeClass("error")}form.validate().settings.ignore=":disabled,:hidden";return form.valid()},onStepChanged:function(event,currentIndex,priorIndex){if(currentIndex===2&&Number($("#age").val())>=18){$(this).steps("next")}if(currentIndex===2&&priorIndex===3){$(this).steps("previous")}},onFinishing:function(event,currentIndex){var form=$(this);form.validate().settings.ignore=":disabled";return form.valid()},onFinished:function(event,currentIndex){var form=$(this);form.submit()}}).validate({errorPlacement:function(error,element){element.before(error)},rules:{confirm:{equalTo:"#password"}}})});
+		var finish = document.getElementsByTagName('a')[2];
+		document.getElementsByTagName('a')[0].addEventListener("click", fun);
+		function fun(){
+			alert('ok');
+		}
+	</script>
+   
+</body>
+<style>
+	.gohome{
+		display: none!important;
+	}
+	fieldset{
+		width: 100% !important;
+	}
+	.body current{
+		width: 100% !important;
+	}
+	.my-form{
+		border-radius: 4px;
+		height: 34px;
+		width: 100%;
+	}
+	.my-form:focus{
+		border:solid 1px rgb(64, 158, 255)!important;
+		outline: solid 0;
+	}
+	.content{
+		min-height: 340px ;
+	}
+</style>
+
+</html>

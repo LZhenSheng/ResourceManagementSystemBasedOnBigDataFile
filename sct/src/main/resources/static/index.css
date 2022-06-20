@@ -1,0 +1,72 @@
+#click-menu ul { position:absolute; float:left; border:1px solid #979797;background:#f1f1f1; padding:2px; box-shadow:2px 2px 2px rgba(0, 0, 0, .6); width:230px; overflow:hidden; }
+
+#click-menu ul li { float:left; clear:both; height:24px; cursor:pointer; line-height:24px; white-space:nowrap; padding:0 30px; width:100%; display:inline-block; }
+
+#click-menu ul li:hover { background:#E6EDF6; border:1px solid #B4D2F6; }
+
+.skin {
+    width : 100px;
+    padding : 2px;
+    visibility : hidden;
+    position : absolute;
+}
+.myfile {
+    background: #fff url('/img/forder.png') no-repeat 5px ;
+    color: #333;
+    padding-left: 25px;
+}
+
+.mytail{
+    position: absolute;
+    height: 80px;
+    width: 100%;
+    /* background: linear-gradient( rgba(64, 158, 255, 0.1), rgba(64, 158, 255, 0.1)); */
+    background: white;
+    bottom: 0;
+}
+.navbar-brand{
+    float: left;
+    height: 80px;
+    padding: 15px 15px;
+    font-size: 22px;
+    line-height: 46px;
+}
+
+.my-search-bar{
+    border-radius: 4px;
+    font-size: 16px;
+    border: solid 1px #7d7d7d;
+    border-right: none;
+    width: 200px;
+    margin-left: -1px;
+    padding: 17px;
+}
+.my-search-bar:focus{
+    outline: solid 0;
+    border-radius: 4px;
+    border:solid 1px rgb(64, 158, 255)!important;
+    border-right: 0!important;
+}
+
+.input-group{
+    margin-top: 3px;
+    margin-left: 20px;
+    padding: 20px ;
+    padding-left: 30px;
+}
+.my-btn {
+    outline: none !important;
+    background-color: white !important;
+}
+
+.btn{
+    outline: none !important;
+}
+
+.navbar-header{
+    width: auto;
+}
+.my-font{
+    font-size: 16px!important;
+    font-weight: 100!important;
+}

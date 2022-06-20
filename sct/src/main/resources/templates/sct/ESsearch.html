@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>随存通</title>
+	<link href="/layui/css/layui.css" rel="stylesheet" type="text/css"  />
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/font-awesome.min93e3.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+	<link href="/css/login.min.css" rel="stylesheet">
+	<link href="/index.css" rel="stylesheet">
+	<link href="/fonts/iconfonts/iconfont.css" rel="stylesheet" >
+
+
+	<!-- 引入 layui.js -->
+	<script src="/layui/layui.js"></script>
+	<!-- 引入 layer.js -->
+	<script src="/layer/layer.js"></script>
+	<!--    <script src="/js/mainview.js"></script>-->
+</head>
+
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+	<div id="page-wrapper" class="gray-bg">
+		<div class="row border-bottom white-bg head" style="border: none; margin-bottom: 10px;">
+			<div class="row border-bottom white-bg head" style="border: none; margin-bottom: 10px;">
+				<nav class="navbar navbar-static-top" role="navigation" style="background-color: transparent;" >
+					<div class="navbar-header" >
+						<a class="navbar-brand" style="font-size:25px;background-color: transparent; color: rgb(64, 158, 255);"><span id="brand1">随存通</span><span id="brand2">软通人力资源管理大数据</span></a>
+						<div class="input-group" style="padding-right:10px;">
+							<input id="key" class="input form-control my-search-bar searchform" type="text" placeholder="搜索..." style="margin-left: -1px; padding: 17px;" />
+							<span class="input-group-btn" style="width: 12%;vertical-align: top!important;">
+							<button id="ESsearch" type="button" class="btn  my-btn" style=" border: solid 1px rgb(64, 158, 255);">
+								<span class="iconfont icon icon-sousuo"></span>
+							</button>
+						</span>
+						</div>
+
+					</div>
+					<div class="navbar-collapse collapse my-form" id="navbar">
+						<div class="selectbar col-sm-8" style="margin:3px;padding-top: 20px;">
+							<select data-placeholder="" class="chosen-select searchform" style="padding: 9px; border: 1px solid #ccc;" tabindex="2">
+								<option value="FULL_TEXT_SEARCH" hassubinfo="true">全文搜索</option>
+								<option value="FILE_NAME_SEARCH"  hassubinfo="true" >文件搜索</option>
+							</select>
+							<span style="margin-left:8px">排序：</span>
+							<select data-placeholder="" class="chosen-select searchform" style="padding: 9px; border: 1px solid #ccc;" tabindex="2">
+								<option value="SORT_BY_MATCH"  hassubinfo="true" >相关程度</option>
+								<option value="SORT_BY_SIZE" hassubinfo="true">文件大小</option>
+								<option value="SORT_BY_DATE"  hassubinfo="true" >日期</option>
+							</select>
+							<span style="margin-left:8px">文件类型：</span>
+							<select data-placeholder="" class="chosen-select searchform" style="padding: 9px; border: 1px solid #ccc;" tabindex="2">
+								<option value="ALL_TYPE_FILE"  hassubinfo="true" >  全部</option>
+								<option value="TXT"  hassubinfo="true" >  .txt</option>
+								<option value="DOCX" hassubinfo="true">  .doc</option>
+							</select>
+						</div>
+						<ul class="nav navbar-top-links navbar-right" style="margin-top: -10px;">
+							<li>
+								<a style="margin-top: 20px;" href="/home/login" class="my-font my-font-red">
+									<i></i> 退出
+									<span class="iconfont icon-tuichu"></span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+
+		</div>
+		<div class="wrapper wrapper-content">
+			<div class="container container-1">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-content" style="background: linear-gradient( rgba(255,255,255,1), rgba(255,255,255,0.2));">
+								<div class="table-responsive">
+									<table class="table table-hover">
+										<thead>
+										<tr>
+											<th style="width: 280px;">文 件</th>
+											<th style="width: 360px;">路 径</th>
+											<th>相关程度</th>
+											<th style="width: 224px;">操 作</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr th:each="file:${fileList}">
+											<td class="project-title">
+												<img th:src="'/icon/txt.png'">
+												<a th:utext="${file.fileName}"></a>
+												<br/>
+												<small th:text="'修改时间：'+${file.fileModificationTime}"></small>
+											</td>
+											<td >
+												<p th:text="${file.filePath}" ></p>
+											</td>
+											<td class="project-completion">
+												<small th:text="'相关程度：'+${file.fileScorePercent}+'%'"></small>
+												<div class="progress progress-mini">
+													<div th:style="'width:'+${file.fileScorePercent}+'%;'" class="progress-bar"></div>
+												</div>
+											</td>
+											<td>
+												<button href="" class="btn btn-white btn-sm " data-toggle="modal" th:data-target="'#file_'+${file.fileId}"><i class="fa fa-folder"></i> 查看 </button>
+												<div class="modal inmodal fade" th:id="'file_'+${file.fileId}" tabindex="-1" role="dialog"  aria-hidden="true">
+													<div class="modal-dialog modal-lg">
+														<div class="modal-content">
+															<div class="modal-header">
+																<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+																<h4 th:utext="${file.fileName}" class="modal-title">文件详情</h4>
+															</div>
+															<div class="modal-body">
+																<p th:utext="${file.fileContent}" >string... </p>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+															</div>
+														</div>
+													</div>
+												</div>
+												<a href="" class="btn btn-white btn-sm download" ><i class="fa fa-download"></i> 下载 </a>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mytail">
+	<div class="signup-footer" style="border: none;">
+		<div class="pull-left" style="color: black;margin-left: 16.66%;">
+			&copy; 2021 All Rights Reserved. Guilin University of Electronic and Technology
+		</div>
+	</div>
+</div>
+<script src="/js/gaoliang.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/js/content.min.js?v=1.0.0"></script>
+
+<script type="text/javascript">
+	$('#detail').on('click',function (){
+		layer.open({
+			type:2,
+			area: ['700px', '450px'],
+			fixed: false, //不固定
+			maxmin: true,
+			content: '/iframe.html'
+		});
+	});
+	$(document).ready(function(){
+		$('#key').focus(function(){
+			$('.selectbar').fadeIn(1000);
+		});
+		$('#key').blur(function(){
+			if($('#key').val()===''){
+
+			}
+		});
+		var clk = 1; var oprating = 0;
+		$('.navbar-brand').click(function(){
+			if(clk === 1&&oprating === 0){
+				clk--;
+				oprating = 1;
+				$('.navbar-brand').delay(300).animate({width:'330px'},1000);
+				$('#brand1').delay(0).fadeToggle(1000);
+				$('#brand2').delay(1000).fadeToggle(1000);
+				setTimeout(function(){
+					oprating = 0;
+				},1700);
+			}else{
+				if(clk === 0&&oprating === 0){
+					oprating = 1;
+					clk++;
+					$('#brand2').fadeToggle(200);
+					$('#brand1').delay(200).fadeToggle(1000);
+					$('.navbar-brand').delay(200).animate({width:'125px'},1000);
+					setTimeout(function(){
+						oprating = 0;
+					},1700);
+				}
+			};
+
+			//
+		});
+
+	});
+	var key = '';
+	var searchtype = '';
+	var sortway = '';
+	var filetype = '';
+	$("#ESsearch").on('click',function(){
+		var val = $('.searchform');var s = [];
+		val.each(function(){
+			s.push($(this).val());
+		});
+		key = s[0];searchtype = s[1];sortway = s[2];filetype = s[3];
+
+		if(key!==''){
+			$('.container-2').fadeOut(0);
+			$('.container-1').fadeOut(0);
+			$('.container-2').fadeIn(1000);
+			ESsearch(key,searchtype,sortway,filetype);
+		} else{
+			layer.tips("<span style='color:red;font-size=18px!important'>"+"输入内容不能为空"+"</span>", '#key', {
+				tips: [3,'#F2F9FF']
+			});
+		}
+
+
+	});
+
+	//发送POST请求跳转到指定页面
+	function httpPost(URL, PARAMS) {
+		var temp = document.createElement("form");
+		temp.action = URL;
+		temp.method = "POST";
+		temp.style.display = "none";
+		for (var x in PARAMS) {
+			var opt = document.createElement("textarea");
+			opt.name = x;
+			opt.value = PARAMS[x];
+			temp.appendChild(opt);
+		}
+		document.body.appendChild(temp);
+		temp.submit();
+		return temp;
+	}
+
+	//ES搜索
+	function ESsearch(key,searchtype,sortway,filetype){
+		let params = {
+			"search_query": key ,
+			"search_type": searchtype,
+			"file_type": filetype,
+			"sort_type": sortway,
+			"id": [[${id}]]
+		};
+		httpPost("/sct/es", params);
+	}
+</script>
+
+
+
+<style>
+	.glnow{
+		background-color: yellow;
+	}
+	.selectbar {
+		display: none;
+		width: 421px;
+	}
+	select {
+		border-radius: 4px;
+	}
+	.selectbar {
+		display: none;
+		width: 421px;
+	}
+	.container-2{
+		display: none;
+	}
+	select {
+		border-radius: 4px;
+	}
+	.navbar-brand{
+		width: 125px;
+
+	}
+	#brand1{
+		display: inline;
+	}
+	#brand2{
+		display: none;
+	}
+
+	.input-group{
+		margin-left: 0;
+		padding-left:0 ;
+	}
+	.gohome{
+		display: none;
+	}
+
+</style>
+
+</body>
+
+</html>

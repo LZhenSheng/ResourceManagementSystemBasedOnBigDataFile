@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>找回密码</title>
+    <link href="/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+	<link href="/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+    <link href="/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content " style="margin-top: 8%;">
+        
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2">
+                <div class="ibox">
+					<div class="ibox-content" >
+                        <h2>找回密码</h2>
+                        <p>根据引导找回您的密码！</p>
+                        <form id="form" class="wizard-big">
+                            <h1>填写用户名和手机号码</h1>
+                            <fieldset>
+                                
+                                <div class="row">
+									<h2 class="col-sm-offset-2">请填写您的账户信息</h2>
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="form-group">
+                                            <label>请填写您要找回账户的用户名 *</label>
+                                            <input id="userName" name="userName" type="text" class="form-control required my-form" minlength="2" maxlength="6">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>相应的手机号码 *</label>
+                                            <input id="phone" name="phone" type="text" class="form-control required my-form" max="19900000000" min="13299999999">
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </fieldset>
+                            <h1>密保问题验证</h1>
+                            <fieldset style="margin-bottom:30px;">
+                                <div class="row">
+                                	<h2 class="col-sm-offset-2">请正确填写密保问题以完成验证</h2>
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                       <div class="form-group">
+                                            <label>请选择您的密保问题</label>
+                                        	<div class="form-group">
+                                        	    <div class="input-group col-sm-12">
+                                                    <input id="phone_2" name="phone" th:value="${phone}"  type="hidden">
+                                        	        <select name="" data-placeholder="" class="chosen-select my-form" style="padding: 8px; border: 1px solid #ccc;"   tabindex="2">
+                                        	        <option  hassubinfo="true" value="110000">您最喜欢的食物是？</option>
+                                        	        <option  hassubinfo="true" value="120000">您的小学班主任的名字是？</option>
+                                        	        <option  hassubinfo="true" value="130000">您的个人计算机型号是？</option>
+                                        	        </select>
+                                        	    </div>
+                                        	</div>
+                                        	
+                                        </div>
+                                        <div class="form-group">
+                                            <label>密保问题答案</label>
+                                            <input id="answer" name="answer" type="text" class="form-control required my-form" placeholder="请输入答案...">
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            
+
+                            <h1>修改密码</h1>
+                            <fieldset>
+								<div class="row">
+									<h2 class="col-sm-offset-2">请重新设置密码</h2>
+								    <div class="col-sm-8 col-sm-offset-2">
+								      <div class="form-group">
+								          <label>密码 *</label>
+								          <input id="password" name="password" type="password" class="form-control required my-form" minlength="6" maxlength="20">
+								      </div>
+								      <div class="form-group">
+								          <label>确认密码 *</label>
+								          <input id="confirm" name="confirm" type="password" class="form-control required my-form" minlength="6" maxlength="20">
+								      </div>
+								    </div>
+								</div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/plugins/staps/jquery.steps.js"></script>
+    <script src="/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="/js/plugins/validate/messages_zh.min.js"></script>
+
+    <script>
+        var step = -1;
+        let phone;
+		$(document).ready(function(){$("#wizard").steps();$("#form").steps(
+		{bodyTag:"fieldset",
+		onStepChanging:function(event,currentIndex,newIndex){
+			if(currentIndex>newIndex){
+				return true
+            }if(newIndex===3&&Number($("#age").val())<18){
+                return false
+            }
+            var form=$(this);
+            if(currentIndex<newIndex){
+                $(".body:eq("+newIndex+") label.error",form).remove();
+                $(".body:eq("+newIndex+") .error",form).removeClass("error")
+            }
+            form.validate().settings.ignore=":disabled,:hidden";
+            //请在这里写post请求
+            var value = document.getElementsByClassName('my-form');
+            var i = 0;
+            console.log(form.valid());
+            if(form.valid() && step === -1){
+                for( i = 0;i<2;i++){
+                    if(document.getElementsByClassName('my-form')[i].value!==''){
+                        console.log('value-'+i)
+                        console.log(value[i].value);
+                    }
+                }
+                phone = value[1].value;
+                let d_1 = {'name':value[0].value , 'phone': phone};
+                let json = JSON.stringify(d_1);
+                $.ajax({
+                    url: '/home/userCheck',
+                    method: 'POST',
+                    async: false,
+                    data: json,
+                    contentType : 'application/json;charset=utf-8',
+                    beforeSend:function(){
+                        console.log(step+":"+json);
+                        console.log("Sending");
+                    },
+                    success: function (data) {
+                        if (data.code === '401') {
+                            console.log("okk!");
+                            step++;
+                        }  else {
+                            alert("用户名或手机号有误！");
+                            location.reload();
+                        }
+                    },
+                    error: function () {
+                        alert("error");
+                        return form.valid();
+                        window.location.reload();
+                    }
+                });
+            } else {
+                if(form.valid() && step === 0){
+                    for( i = 2;i<4;i++){
+                        if(document.getElementsByClassName('my-form')[i].value !== ''){
+                            console.log('value-'+i);
+                            console.log(value[i].value);
+                        }
+                    }
+                    let d_2 = {'question':value[2].value ,'answer':value[3].value , 'phone':phone};
+                    let json = JSON.stringify(d_2);
+                    $.ajax({
+                        url: '/home/questionCheck',
+                        method: 'POST',
+                        async: false,
+                        data: json,
+                        contentType : 'application/json;charset=utf-8',
+                        beforeSend:function(){
+                            console.log(step+":"+json);
+                            console.log("Sending");
+                        },
+                        success: function (data) {
+                            if (data.code === '501') {
+                                console.log("okk!");
+                                step++;
+                            }  else {
+                                alert("验证失败！");
+                                location.reload();
+                            }
+                        },
+                        error: function () {
+                            alert("error");
+                            return form.valid();
+                            location.reload();
+                        }
+                    });
+                } else {
+                    if(form.valid()&&step==1){
+                        console.log("password");
+                        for( i = 4;i<6;i++){
+                            if(document.getElementsByClassName('my-form')[i].value!=''){
+                                console.log('value-'+i);
+                                console.log(value[i].value);
+                            }
+                        }
+                    }
+                }
+            };
+
+
+            return form.valid();
+
+		},
+		onStepChanged:function(event,currentIndex,priorIndex){
+			if(currentIndex===2&&Number($("#age").val())>=18){
+                $(this).steps("next")
+            }
+			if(currentIndex===2&&priorIndex===3){
+				    $(this).steps("previous")
+				}
+		},
+		onFinishing:function(event,currentIndex){
+			 // 在这里写finish的js
+			 //。。。。。。。。。。
+			var form=$(this);form.validate().settings.ignore=":disabled";
+			return form.valid()
+		},
+		onFinished:function(event,currentIndex){
+			var form=$(this);
+			var value = document.getElementsByClassName('my-form');
+				for(var i = 4;i<value.length;i++){
+					if(value[i].value!=''){
+						console.log('value-'+i)
+						console.log(value[i].value);
+					}
+				};
+
+            let d_3 = {'password':value[4].value ,'confirm':value[5].value , 'phone':phone};
+            let json = JSON.stringify(d_3);
+            $.ajax({
+                url: '/home/passwordChange',
+                method: 'POST',
+                async: false,
+                data: json,
+                contentType : 'application/json;charset=utf-8',
+                beforeSend:function(){
+                    console.log(step+":"+json);
+                    console.log("Sending");
+                },
+                success: function (data) {
+                    if (data.code === '601') {
+                        console.log("okk!");
+                        step++;
+                        alert('修改成功,返回登录');
+                        window.location.href = "/home/login";
+                    }  else {
+                        alert("修改失败！");
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert("error");
+                    return form.valid();
+                    location.reload();
+                }
+            });
+			}}).validate({errorPlacement:function(error,element){
+				element.before(error)
+				},
+		rules:{confirm:{equalTo:"#password"}}})});
+		    
+		
+	</script>
+   
+</body>
+
+<style>
+	.gohome{
+		display: none!important;
+	}
+	fieldset{
+		width: 100% !important;
+	}
+	.body current{
+		width: 100% !important;
+	}
+	/* .actions {
+		    top: -50px;
+		    right: 10px;
+	} */
+	.my-form{
+		border-radius: 4px;
+		height: 34px;
+		width: 100%;
+	}
+	.my-form:focus{
+		border:solid 1px rgb(64, 158, 255)!important;
+		outline: solid 0;
+	}
+	.content{
+		min-height: 340px ;
+	}
+</style>
+
+</html>

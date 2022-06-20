@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>随存通</title>
+    <link href="/layui/css/layui.css" rel="stylesheet" type="text/css"  />
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min93e3.css" rel="stylesheet">
+    <link href="/css/animate.min.css" rel="stylesheet">
+    <link href="/css/style.min.css" rel="stylesheet">
+    <link href="/css/login.min.css" rel="stylesheet">
+    <link href="/index.css" rel="stylesheet">
+    <link href="/fonts/iconfonts/iconfont.css" rel="stylesheet" >
+
+    <!-- cdn引入jQuery -->
+    <script src="/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/index.js"></script>
+    <!-- 引入 layui.js -->
+    <script src="/layui/layui.js"></script>
+    <!-- 引入 layer.js -->
+    <script src="/layer/layer.js"></script>
+<!--    <script src="/js/mainview.js"></script>-->
+</head>
+
+<body class="gray-bg top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg head" style="border: none; margin-bottom: 10px;">
+            <nav class="navbar navbar-static-top" role="navigation" style="background-color: transparent;" >
+                <div class="navbar-header" >
+                    <a href="/sct/index" class="navbar-brand" style="font-size:25px;background-color: transparent; color: rgb(64, 158, 255);">随存通</a>
+                    <div class="input-group"   style="padding-right:10px;">
+                        <input href="/sct/es" id="key" class="input form-control my-search-bar searchform" readonly="readonly" type="text" placeholder="点击搜索按钮进入ES搜索..." style="margin-left: -1px; padding: 17px;" />
+                        <span  class="input-group-btn" style="width: 12%;vertical-align: top!important;">
+							<button  onclick="ESsearch()" id="ESsearch" type="button" class="btn  my-btn" style=" border: solid 1px rgb(64, 158, 255);">
+								<span class="iconfont icon icon-sousuo"></span>
+                            </button>
+						</span>
+                    </div>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar">
+
+                    <ul class="nav navbar-top-links navbar-right" style="margin-top: 15px;">
+                        <li>
+                            <a href="/home/login" class="my-font my-font-red">
+                                <i></i> 退出
+                                <span class="iconfont icon-tuichu"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="container container-1">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title" style="min-height: 60px; background: white;">
+								<div style="float: right; ">
+								    <input id="back"    style="float: right; margin-bottom: 0;margin-left:5px" type="submit"  class="btn btn-primary btn-sm " value="返回" th:onclick="back([[${path}]])" />
+								    <input id="upload"  style="float: right; margin-bottom: 0;margin-left:5px" type="button"  class="btn btn-info btn-sm"     value="上传文件" onclick="" />
+								    <input id="mkdir"   style="float: right; margin-bottom: 0;margin-left:5px" type="button"  class="btn btn-success btn-sm"  value="创建文件夹" onclick="" />
+								</div>
+                            </div>
+                            <div class="ibox-content" style="background: linear-gradient( rgba(255,255,255,1), rgba(255,255,255,0.2));">
+                                <div class="row">
+									<div class="col-sm-12">
+                                        <i id="path" th:text="${path}" th:value="${path}" class="myfile"></i>
+									</div>
+                                </div>
+
+
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>文 件</th>
+											<th>修改时间</th>
+                                            <th>大 小</th>
+                                            <th style="width: 224px;">操 作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="file:${fileList}" >
+                                            <td th:onclick="openDir([[${file.fileName}]])">
+												<div  id="drawing"  class="drawing" >
+                                                    <img th:src="'/icon/'+${file.fileType}+'.png'">
+                                                    <i th:text="${file.fileName}" th:value="${file.fileName}"  ></i>
+                                                    <i th:text="${file.filePath}" th:value="${file.filePath}" style="display: none;"></i>
+												</div>
+                                            </td>
+											<td th:text="${file.modificationTime}"> </td>
+                                            <td th:text="${file.size}"> </td>
+                                            <td >
+                                                <button class="btn btn-xs btn-success download" th:value="${file.filePath}" type="button" >下载</button>
+                                                <button class="btn btn-xs btn-info    copy    " th:value="${file.filePath}" type="button" >复制</button>
+                                                <button class="btn btn-xs btn-primary move    " th:value="${file.filePath}" type="submit" >移动</button>
+                                                <button class="btn btn-xs btn-warning rename  " th:value="${file.filePath}" type="button" >重命名</button>
+                                                <button class="btn btn-xs btn-danger  delete  " th:value="${file.filePath}" type="button" >删除</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mytail">
+    <div class="signup-footer" style="border: none;">
+        <div class="pull-left" style="color: black;margin-left: 16.66%;">
+            &copy; 2021 All Rights Reserved. Guilin University of Electronic and Technology
+        </div>
+    </div>
+</div>
+
+
+<script th:inline="javascript" type="text/javascript">
+    var id = [[${id}]] ;
+    var path = [[${path}]];
+
+    //发送POST请求跳转到指定页面
+    function httpPost(URL, PARAMS) {
+        var temp = document.createElement("form");
+        temp.action = URL;
+        temp.method = "POST";
+        temp.style.display = "none";
+        for (var x in PARAMS) {
+            var opt = document.createElement("textarea");
+            opt.name = x;
+            opt.value = PARAMS[x];
+            temp.appendChild(opt);
+        }
+        document.body.appendChild(temp);
+        temp.submit();
+        return temp;
+    }
+    function openDir(fileName) {
+        if(fileName.lastIndexOf( "." ) < 0){
+            let path = $.trim($("#path").text());
+            let openPath = (path === "/")? (path + fileName) : (path + "/" + fileName);
+            let params = {
+                "path": openPath ,
+                "id": id
+            };
+            console.log("params="+openPath);
+            httpPost("/sct/index", params);
+        } else {
+
+        }
+        return false;
+    }
+    function back(path){
+        let prePath = path;
+        if (path !== "/"){
+            if(path.lastIndexOf('/') === 0){
+                prePath = "/";
+            }else {
+                prePath = path.substring(0,path.lastIndexOf('/'));
+            }
+        }
+        let params = {
+            "path": prePath,
+        };
+        httpPost("/sct/index", params);
+    }
+
+    //ES搜索
+    function ESsearch(){
+        let params = {
+            "id": [[${id}]]
+        };
+        httpPost("/sct/es", params);
+    }
+
+    // layer弹窗
+    var v;
+    var s;
+
+    $('#mkdir').on('click',function(){
+        layer.prompt({title: '请输入文件夹名称'},function(val,index){
+            var conf = false;//确认移动是否成功
+            //post请求
+            console.log("val="+val);
+            let params = {
+                "path": path ,
+                "dirName": val,
+            };
+            console.log("params="+params);
+            //httpPost("/sct/createDir", params);
+            let json = JSON.stringify(params);
+            $.ajax({
+                url: '/sct/createDir',
+                method: 'POST',
+                data: json,
+                contentType : 'application/json;charset=utf-8',
+                beforeSend:function(){
+                    console.log("Sending");
+                },
+                success: function (data) {
+                    console.log("okk!");
+                    conf = true;
+                },
+                error: function () {
+                    alert("error");
+                    //location.reload();
+                }
+            });
+
+            var targetpath = val;
+            if (conf==true){
+                layer.close(index);
+                layer.msg('文件夹'+targetpath+'已经成功创建在'+s+'文件夹下');
+            }
+            else{
+                layer.close(index);
+            }
+        });
+
+    });
+    $('.download').on('click', function(){ //下载文件
+        v = $(this).val();
+        layer.prompt({title: '请输本地下载路径（绝对路径）'},function(val,index){
+            var conf = true;
+            var targetpath = val;
+            var downloadPath = v;
+            //post请求
+
+            let params = {
+                "filepath": v ,
+                "localpath": val,
+            };
+            console.log("params="+params);
+            //httpPost("/sct/createDir", params);
+            let json = JSON.stringify(params);
+            $.ajax({
+                url: '/sct/download',
+                method: 'POST',
+                data: json,
+                contentType : 'application/json;charset=utf-8',
+                beforeSend:function(){
+                    console.log("Sending");
+                },
+                success: function (data) {
+                    console.log("okk!");
+                    conf = true;
+                },
+                error: function () {
+                    alert("error");
+                    //location.reload();
+                }
+            });
+
+            if (conf==true){
+                layer.close(index);
+                layer.msg('文件'+v+'已经成功下载到'+targetpath+'文件夹下');
+            }
+            else{
+                layer.close(index);
+                layer.msg('下载失败！');
+            }
+        });
+
+    });
+    $('#upload').on('click', function(){ //下载文件
+        v = path;
+        layer.prompt({title: '请输本地上传路径（绝对路径）'},function(val,index){
+            var conf = true;
+            //post请求
+            let params = {
+                "filepath": v ,
+                "localpath": val,
+            };
+            console.log("params="+params);
+            let json = JSON.stringify(params);
+            $.ajax({
+                url: '/sct/upload',
+                method: 'POST',
+                data: json,
+                contentType : 'application/json;charset=utf-8',
+                beforeSend:function(){
+                    console.log("Sending");
+                },
+                success: function (data) {
+                    console.log("okk!");
+                    conf = true;
+                },
+                error: function () {
+                    alert("error");
+                    //location.reload();
+                }
+            });
+
+            if (conf==true){
+                layer.close(index);
+                layer.msg('文件'+val+'已经成功上传到到'+v+'文件夹下');
+            }
+            else{
+                layer.close(index);
+                layer.msg('上传失败！');
+            }
+        });
+
+    });
+    $('.move').on('click',function(){
+        console.log('移动按钮'+$(this).attr('th:value'));
+        v = $(this).val();
+        layer.prompt({title: '输入目标路径并确认'},function(val,index){
+            var conf = true;//确认移动是否成功
+            //post请求
+            var targrtpath = val;
+            var orinpath = v; //起始路径
+
+            let params = {
+                "sourcePath": v,
+                "targetPath": val
+            };
+            console.log("params="+params);
+            let json = JSON.stringify(params);
+            $.ajax({
+                url: '/sct/move',
+                method: 'POST',
+                data: json,
+                contentType : 'application/json;charset=utf-8',
+                beforeSend:function(){
+                    console.log("Sending");
+                },
+                success: function () {
+                    console.log("okk!");
+                    conf = true;
+                },
+                error: function () {
+                    alert("error");
+                    //location.reload();
+                }
+            });
+
+            if (conf==true){
+                this.layer.close(index);
+                this.layer.msg('文件'+orinpath+'已经成功移动到 '+val);
+            }
+            else{
+                this.layer.close(index);
+                this.layer.msg('移动失败');
+            }
+        });
+
+    });
+
+    //删除
+    $('.delete').on('click',function(){
+        let delPath = $(this).val();
+        console.log(delPath);
+        layer.confirm('执行操作后将不可更改，您确定要删除文件'+delPath+'吗？',{
+            btn:['确定','取消']
+        },function(){
+            //post请求
+            let params = {
+                "delPath": delPath,
+                "id": id
+            };
+            console.log("params="+params);
+            //httpPost("/sct/createDir", params);
+            let json = JSON.stringify(params);
+            $.ajax({
+                url: '/sct/delete',
+                method: 'POST',
+                data: json,
+                contentType : 'application/json;charset=utf-8',
+                beforeSend:function(){
+                    console.log("Sending");
+                },
+                success: function () {
+                    console.log("okk!");
+                    conf = true;
+                },
+                error: function () {
+                    alert("error");
+                    //location.reload();
+                }
+            });
+            layer.msg('文件'+delPath+'已经成功删除');
+
+        },function(){
+            layer.msg('已取消');
+        });
+    });
+
+
+    $('.copy').on('click',function(){
+        console.log('复制按钮'+$(this).attr('th:value'));
+        v = $(this).val();
+        layer.prompt({title: '输入目标路径并确认'},function(val,index){
+            var conf = true;//确认复制是否成功
+            //post请求
+            var targrtpath = val;
+            var orinpath = v; //起始路径
+
+            let params = {
+                "sourcePath": v,
+                "targetPath": val
+            };
+            console.log("params="+params);
+            //httpPost("/sct/createDir", params);
+            let json = JSON.stringify(params);
+            $.ajax({
+                url: '/sct/copy',
+                method: 'POST',
+                data: json,
+                contentType : 'application/json;charset=utf-8',
+                beforeSend:function(){
+                    console.log("Sending");
+                },
+                success: function () {
+                    console.log("okk!");
+                    conf = true;
+                },
+                error: function () {
+                    alert("error");
+                    //location.reload();
+                }
+            });
+
+            if (conf==true){
+                layer.close(index);
+                layer.msg('文件'+orinpath+'已经成功复制到 '+val);
+            }
+            else{
+                layer.close(index);
+                layer.msg('复制失败');
+            }
+        });
+    });
+
+    $('.rename').on('click',function(){
+        v = $(this).val();
+        console.log('重命名按钮'+v);
+        layer.prompt({title:'请输入'},function(val,index){
+            var conf = true;//确认重命名是否成功
+            var targrtpath = path +'/'+val; //要修改成的名字
+            var orinpath = v;  //原名称 (绝对路径)
+            //post请求 (要修改成的名字)
+            let params = {
+                "oldName": orinpath,
+                "newName": targrtpath
+            };
+            console.log("params="+params);
+
+            let json = JSON.stringify(params);
+            $.ajax({
+                url: '/sct/rename',
+                method: 'POST',
+                data: json,
+                contentType : 'application/json;charset=utf-8',
+                beforeSend:function(){
+                    console.log("Sending");
+                },
+                success: function () {
+                    console.log("okk!");
+                    conf = true;
+                },
+                error: function () {
+                    alert("error");
+                    //location.reload();
+                }
+            });
+
+            if (conf==true){
+                layer.close(index);
+                layer.msg('文件'+orinpath+'已重命名为'+targrtpath);
+            }
+            else{
+                layer.close(index);
+                layer.msg('重命名失败');
+            }
+        });
+    });
+
+
+
+</script>
+
+</body>
+
+</html>

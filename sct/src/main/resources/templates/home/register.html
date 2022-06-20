@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>注册</title>
+    <link href="/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/css/animate.min.css" rel="stylesheet">
+    <link href="/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <div style="margin-bottom: 20px">
+                <img style="height: 165px" src="/img/guetmin.png">
+<!--                <img style="height: 65px" src="img/mai_iSS_NewLogo_color.png">-->
+
+            </div>
+            <h3>欢迎注册 </h3>
+            <p>创建一个新账户</p>
+            <form class="m-t" role="form" action="">
+                <div class="form-group">
+                    <input style="border-radius:4px;" type="text" class="form-control my-form" placeholder="请输入用户名" required="">
+                </div>
+                <div class="form-group">
+                    <input style="border-radius:4px;" type="text" class="form-control my-form" placeholder="请输入手机号码" required="">
+                </div>
+				<div class="form-group">
+				 	<!-- <input id="name" name="name" type="text" class="form-control required my-form"> -->
+					<div class="">
+						<select data-placeholder="" class="chosen-select my-form" style="padding: 8px; border: 1px solid #ccc;" tabindex="2">
+				 	    <option value="-1">选择密保问题</option>
+				 	    <option hassubinfo="true" value="1">您最喜欢的食物是？</option>
+				 	    <option hassubinfo="true" value="2">您的小学班主任的名字是？</option>
+				 	    <option hassubinfo="true" value="3">您的个人计算机型号是？</option>
+						</select>
+					</div>
+				 	
+				 					 	
+				 </div>
+				 <div class="form-group">
+				     <input id="answer" name="answer" type="text" class="form-control required my-form" placeholder="请输入密保问题答案">
+				 </div>
+                <div class="form-group">
+                    <input style="border-radius:4px;" type="password" class="form-control my-form" placeholder="请输入密码" required="">
+                </div>
+                <div class="form-group">
+                    <input style="border-radius:4px;" type="password" class="form-control my-form" placeholder="请再次输入密码" required="">
+                </div>
+                <div class="form-group text-left">
+                    <div class="checkbox i-checks">
+                        <label class="no-padding">
+                            <input type="checkbox" ><i></i> 我同意注册协议</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-info block full-width m-b">注 册</button>
+
+                <p class="text-muted text-center"><small>已经有账户了？</small><a href="login">点此登录</a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+    <script src="/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
+    </script>
+</body>
+
+<style>
+	.my-form{
+		border-radius: 4px;
+		height: 34px;
+		width: 100%;
+		border: #e5e5e5 !important;
+		outline: none;
+	}
+	.my-form:focus{
+		border:solid 1px rgb(64, 158, 255)!important;
+		outline: solid 0;
+	}
+</style>
+
+</html>
